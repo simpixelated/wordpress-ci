@@ -4,8 +4,8 @@ executors:
     docker: 
       - image: docker:17.05.0-ce-git
 
-orbs:
-  ghostinspector: ghostinspector/test-runner@1.0.0
+# orbs:
+#   ghostinspector: ghostinspector/test-runner@1.0.0
 
 jobs:
   test_plugin:
@@ -59,12 +59,24 @@ jobs:
               wordpress:cli plugin install ghost-inspector \
                 --activate \
                 --url=localhost
-      - ghostinspector/test-standalone-app:
-          suite-id: $GI_SUITE
-          network: wp-network
-          vpn-token: $NGROK_TOKEN
-          vpn-target: 'wp-container:80'
-          extra-params: '{"wp_username": "admin", "wp_password": "admin"}'
+      # - ghostinspector/test-standalone-app:
+      #     suite-id: $GI_SUITE
+      #     network: wp-network
+      #     vpn-token: $NGROK_TOKEN
+      #     vpn-target: 'wp-container:80'
+      #     extra-params: '{"wp_username": "admin", "wp_password": "admin"}'
+      - run:
+          name: execute Ghost Inspector test(s)
+          command: |
+            docker run \
+              -e APP_PORT=wp-container:80 \
+              -e GI_API_KEY=$GI_API_KEY \
+              -e GI_SUITE=$GI_SUITE \
+              -e NGROK_TOKEN=$NGROK_TOKEN \
+              -e GI_PARAM_wp_username=admin \
+              -e GI_PARAM_wp_password=admin \
+              --network wp-network \
+              ghostinspector/test-runner-standalone
 
 workflows:
   test:
