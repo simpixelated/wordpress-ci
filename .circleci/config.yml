@@ -3,6 +3,7 @@ version: 2
 jobs:
   build:
     docker:
+      - image: docker
       - image: wordpress
         environment:
           WORDPRESS_DB_HOST: localhost
