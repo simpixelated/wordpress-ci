@@ -4,25 +4,20 @@ jobs:
   build:
     docker:
       - image: circleci/buildpack-deps
-      # - image: wordpress
-      #   environment:
-      #     WORDPRESS_DB_HOST: localhost
-      #     WORDPRESS_DB_USER: exampleuser
-      #     WORDPRESS_DB_PASSWORD: examplepass
-      #     WORDPRESS_DB_NAME: exampledb
-
-      - image: circleci/mysql:5.7
-        environment:
-          MYSQL_DATABASE: exampledb
-          MYSQL_USER: exampleuser
-          MYSQL_PASSWORD: examplepass
-          MYSQL_RANDOM_ROOT_PASSWORD: '1'
-
-      # - image: wordpress:cli
 
     steps:
       - checkout
       - setup_remote_docker
+      - run:
+          name: start MySQL
+          command: |
+            docker run -d --name wpdb \
+            -e MYSQL_DATABASE=exampledb \
+            -e MYSQL_USER=exampleuser \
+            -e MYSQL_PASSWORD=examplepass \
+            -e MYSQL_RANDOM_ROOT_PASSWORD='1'
+            mysql:5.7
+
       - run:
           name: wait for DB
           command: dockerize -wait tcp://localhost:3306 -timeout 1m
