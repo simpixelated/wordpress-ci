@@ -15,7 +15,7 @@ jobs:
             -e MYSQL_DATABASE=exampledb \
             -e MYSQL_USER=exampleuser \
             -e MYSQL_PASSWORD=examplepass \
-            -e MYSQL_RANDOM_ROOT_PASSWORD='1'
+            -e MYSQL_RANDOM_ROOT_PASSWORD='1' \
             mysql:5.7
 
       - run:
