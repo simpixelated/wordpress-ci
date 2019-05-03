@@ -9,12 +9,20 @@ jobs:
           WORDPRESS_DB_USER: exampleuser
           WORDPRESS_DB_PASSWORD: examplepass
           WORDPRESS_DB_NAME: exampledb
+
+      - image: circleci/mysql:5.7
+        environment:
           MYSQL_DATABASE: exampledb
           MYSQL_USER: exampleuser
           MYSQL_PASSWORD: examplepass
           MYSQL_RANDOM_ROOT_PASSWORD: '1'
+
     steps:
       - checkout
+      - run:
+          name: install mysql-client
+          command: sudo apt install -y mysql-client
+
       - run:
           name: install wp-cli
           command: |
@@ -22,3 +30,11 @@ jobs:
             chmod +x wp-cli.phar
             sudo mv wp-cli.phar /usr/local/bin/wp
             wp --info
+          
+      - run:
+          name: wait for DB
+          command: dockerize -wait tcp://localhost:3306 -timeout 1m
+
+      - run:
+          name: install WordPress
+          command: wp core install --path=/var/www/html --url=localhost --title=test --admin_user=test --admin_password=test --admin_email=test@example.com
