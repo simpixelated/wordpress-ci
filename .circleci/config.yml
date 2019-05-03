@@ -3,40 +3,23 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/buildpack-deps
+      - image: wordpress:cli
+
+      - image: wordpress
+        environment:
+          WORDPRESS_DB_HOST: localhost:3306
+          WORDPRESS_DB_USER: root
+          WORDPRESS_DB_PASSWORD: 1234
+          WORDPRESS_DB_NAME: wordpress
+
+      - image: circleci/mysql:5.7
+        environment:
+          MYSQL_ROOT_PASSWORD: 1234
+          MYSQL_DATABASE: wordpress
 
     steps:
-      - setup_remote_docker
       - checkout
-      - run:
-          name: Set up network
-          command: docker network create wp-network
-      - run:
-          name: start MySQL
-          command: |
-            docker run -d \
-            -e MYSQL_ROOT_PASSWORD=1234 \
-            -e MYSQL_DATABASE=wordpress \
-            --name db \
-            --network wp-network \
-            mysql:5.7
-
-      - run:
-          name: setup WordPress config
-          command: |
-            docker run -d \
-            -e WORDPRESS_DB_HOST=db:3306 \
-            -e WORDPRESS_DB_USER=root \
-            -e WORDPRESS_DB_PASSWORD=1234 \
-            -e WORDPRESS_DB_NAME=wordpress \
-            --name wp-container \
-            --network wp-network \
-            wordpress
-
       - run:
           name: install WordPress
           command: |
-            docker run -it --rm \
-            --volumes-from wp-container \
-            --network wp-network \
-            wordpress:cli core install --url=localhost --title=test --admin_user=test --admin_password=test --admin_email=test@example.com --allow-root --path=/var/www/html
+            wp core install --url=localhost --title=test --admin_user=test --admin_password=test --admin_email=test@example.com --allow-root --path=/var/www/html
