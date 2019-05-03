@@ -9,9 +9,14 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
+          name: Set up temporary docker network
+          command: docker network create my-docker-network
+      - run:
           name: start MySQL
           command: |
-            docker run -d --name wpdb \
+            docker run -d \
+            --name wpdb \
+            --network my-docker-network \
             -e MYSQL_DATABASE=exampledb \
             -e MYSQL_USER=exampleuser \
             -e MYSQL_PASSWORD=examplepass \
@@ -24,7 +29,9 @@ jobs:
       - run:
           name: start WordPress
           command: |
-            docker run -d --name some-wordpress \
+            docker run -d \
+            --name some-wordpress \
+            --network my-docker-network \
             -e WORDPRESS_DB_HOST=127.0.0.1 \
             -e WORDPRESS_DB_USER=exampleuser \
             -e WORDPRESS_DB_PASSWORD=examplepass \
@@ -37,5 +44,5 @@ jobs:
           command: |
             docker run -it --rm \
             --volumes-from some-wordpress \
-            --network container:some-wordpress \
+            --network my-docker-network \
             wordpress:cli core install --url=localhost --title=test --admin_user=test --admin_password=test --admin_email=test@example.com --allow-root --path=/var/www/html
