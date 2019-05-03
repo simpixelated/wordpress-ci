@@ -16,9 +16,6 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
-          name: wait for DB
-          command: dockerize -wait tcp://localhost:3306 -timeout 1m
-      - run:
           name: start WordPress
           command: |
             docker run -d --name some-wordpress \
@@ -30,9 +27,12 @@ jobs:
             wordpress
 
       - run:
+          name: wait for DB
+          command: dockerize -wait tcp://localhost:3306 -timeout 1m
+
+      - run:
           name: download, config, and install WordPress
           command: |
             docker run -it --rm \
             --volumes-from some-wordpress \
-            #--network container:some-wordpress \
             wordpress:cli core install --url=localhost --title=test --admin_user=test --admin_password=test --admin_email=test@example.com --allow-root --path=/var/www/html
