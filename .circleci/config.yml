@@ -18,31 +18,22 @@ jobs:
           MYSQL_PASSWORD: examplepass
           MYSQL_RANDOM_ROOT_PASSWORD: '1'
 
+      - image: wordpress:cli
+
     steps:
       - checkout
       - setup_remote_docker
       - run:
           name: start WordPress
           command: docker run --name some-wordpress -p 8080:80 -d wordpress
-      # - run:
-      #     name: install mysql-client
-      #     command: sudo apt install -y mysql-client
-
-      - run:
-          name: install wp-cli
-          command: |
-            curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-            chmod +x wp-cli.phar
-            mv wp-cli.phar /usr/local/bin/wp
-            wp --info
           
       - run:
           name: wait for DB
-          command: curl -L https://github.com/vishnubob/wait-for-it/raw/master/wait-for-it.sh > /tmp/wait-for-it.sh && chmod +x /tmp/wait-for-it.sh
+          command: dockerize -wait tcp://localhost:3306 -timeout 1m
 
       - run:
           name: download, config, and install WordPress
-          command: |
-            # wp core download
-            # wp config create --dbhost=127.0.0.1 --dbname=$WORDPRESS_DB_NAME --dbuser=$WORDPRESS_DB_USER --dbpass=$WORDPRESS_DB_PASSWORD
-            wp core install --url=localhost --title=test --admin_user=test --admin_password=test --admin_email=test@example.com --allow-root --path=/var/www/html
+          command: docker run -it --rm \
+            --volumes-from some-wordpress \
+            --network container:some-wordpress \
+            wordpress:cli core install --url=localhost --title=test --admin_user=test --admin_password=test --admin_email=test@example.com --allow-root --path=/var/www/html
