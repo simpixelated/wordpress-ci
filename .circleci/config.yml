@@ -30,7 +30,7 @@ jobs:
           name: start WordPress
           command: |
             docker run -d --name some-wordpress \
-            -e WORDPRESS_DB_HOST=localhost \
+            -e WORDPRESS_DB_HOST=127.0.0.1 \
             -e WORDPRESS_DB_USER=exampleuser \
             -e WORDPRESS_DB_PASSWORD=examplepass \
             -e WORDPRESS_DB_NAME=exampledb \
