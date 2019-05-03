@@ -4,7 +4,19 @@ jobs:
   build:
     docker:
       - image: wordpress
+        environment:
+          WORDPRESS_DB_HOST: db
+          WORDPRESS_DB_USER: exampleuser
+          WORDPRESS_DB_PASSWORD: examplepass
+          WORDPRESS_DB_NAME: exampledb
+
       - image: mysql:5.7
+        environment:
+          MYSQL_DATABASE: exampledb
+          MYSQL_USER: exampleuser
+          MYSQL_PASSWORD: examplepass
+          MYSQL_RANDOM_ROOT_PASSWORD: '1'
+
       - image: wordpress:cli
     steps:
       - checkout
