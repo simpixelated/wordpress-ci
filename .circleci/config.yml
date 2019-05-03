@@ -36,5 +36,17 @@ jobs:
           command: dockerize -wait tcp://localhost:3306 -timeout 1m
 
       - run:
+          name: download WordPress
+          command: wp core download
+
+      - run:
+          name: setup config
+          command: wp config create --dbname=$WORDPRESS_DB_NAME --dbuser=$WORDPRESS_DB_USER --prompt=$WORDPRESS_DB_PASSWORD
+
+      - run:
+          name: create database
+          command: wp db create
+
+      - run:
           name: install WordPress
-          command: wp core install --path=/var/www/html --url=localhost --title=test --admin_user=test --admin_password=test --admin_email=test@example.com
+          command: wp core install --url=localhost --title=test --admin_user=test --admin_password=test --admin_email=test@example.com
