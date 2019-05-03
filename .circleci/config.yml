@@ -3,13 +3,13 @@ version: 2
 jobs:
   build:
     docker:
-      - image: docker
-      - image: wordpress
-        environment:
-          WORDPRESS_DB_HOST: localhost
-          WORDPRESS_DB_USER: exampleuser
-          WORDPRESS_DB_PASSWORD: examplepass
-          WORDPRESS_DB_NAME: exampledb
+      - image: buildpack-deps
+      # - image: wordpress
+      #   environment:
+      #     WORDPRESS_DB_HOST: localhost
+      #     WORDPRESS_DB_USER: exampleuser
+      #     WORDPRESS_DB_PASSWORD: examplepass
+      #     WORDPRESS_DB_NAME: exampledb
 
       - image: circleci/mysql:5.7
         environment:
@@ -18,18 +18,17 @@ jobs:
           MYSQL_PASSWORD: examplepass
           MYSQL_RANDOM_ROOT_PASSWORD: '1'
 
-      - image: wordpress:cli
+      # - image: wordpress:cli
 
     steps:
       - checkout
       - setup_remote_docker
       - run:
-          name: start WordPress
-          command: docker run --name some-wordpress -p 8080:80 -d wordpress
-          
-      - run:
           name: wait for DB
           command: dockerize -wait tcp://localhost:3306 -timeout 1m
+      - run:
+          name: start WordPress
+          command: docker run -d --name some-wordpress -p 8080:80 wordpress
 
       - run:
           name: download, config, and install WordPress
