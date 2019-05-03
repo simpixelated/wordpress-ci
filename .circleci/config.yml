@@ -18,9 +18,9 @@ jobs:
             -e MYSQL_RANDOM_ROOT_PASSWORD='1' \
             mysql:5.7
 
-      - run:
-          name: wait for DB
-          command: dockerize -wait tcp://localhost:3306 -timeout 1m
+      # - run:
+      #     name: wait for DB
+      #     command: dockerize -wait tcp://localhost:3306 -timeout 1m
       - run:
           name: start WordPress
           command: |
