@@ -19,6 +19,10 @@ jobs:
 
     steps:
       - checkout
+      - setup_remote_docker
+      - run:
+          name: start WordPress
+          command: docker run --name some-wordpress -p 8080:80 -d wordpress
       # - run:
       #     name: install mysql-client
       #     command: sudo apt install -y mysql-client
