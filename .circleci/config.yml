@@ -16,16 +16,6 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
-          name: start MySQL
-          command: |
-            docker run -d --name wpdb \
-            -e MYSQL_DATABASE=exampledb \
-            -e MYSQL_USER=exampleuser \
-            -e MYSQL_PASSWORD=examplepass \
-            -e MYSQL_RANDOM_ROOT_PASSWORD='1'
-            mysql:5.7
-
-      - run:
           name: wait for DB
           command: dockerize -wait tcp://localhost:3306 -timeout 1m
       - run:
