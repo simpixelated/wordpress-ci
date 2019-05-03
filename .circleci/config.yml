@@ -3,21 +3,22 @@ version: 2
 jobs:
   build:
     docker:
-      - image: wordpress
+      - image: circleci/php
         environment:
           WORDPRESS_DB_HOST: db
           WORDPRESS_DB_USER: exampleuser
           WORDPRESS_DB_PASSWORD: examplepass
           WORDPRESS_DB_NAME: exampledb
-
-      - image: mysql:5.7
-        environment:
           MYSQL_DATABASE: exampledb
           MYSQL_USER: exampleuser
           MYSQL_PASSWORD: examplepass
           MYSQL_RANDOM_ROOT_PASSWORD: '1'
-
-      - image: wordpress:cli
     steps:
       - checkout
-      - run: echo "hello world"
+      - run:
+        name: install wp-cli
+        command: |
+          curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+          chmod +x wp-cli.phar
+          sudo mv wp-cli.phar /usr/local/bin/wp
+          wp --info
