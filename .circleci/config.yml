@@ -1,0 +1,40 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: wordpress
+      - image: mysql:5.7
+      - image: wordpress:cli
+    steps:
+      - checkout
+      run: echo "hello world"
+    # ports:
+    #   - 8080:80
+    # environment:
+    #   WORDPRESS_DB_HOST: db
+    #   WORDPRESS_DB_USER: exampleuser
+    #   WORDPRESS_DB_PASSWORD: examplepass
+    #   WORDPRESS_DB_NAME: exampledb
+    # volumes:
+    #   - html:/var/www/html
+
+#   db:
+#     image: mysql:5.7
+#     restart: always
+#     environment:
+#       MYSQL_DATABASE: exampledb
+#       MYSQL_USER: exampleuser
+#       MYSQL_PASSWORD: examplepass
+#       MYSQL_RANDOM_ROOT_PASSWORD: '1'
+
+#   wp-cli:
+#     build: ./wp-cli-image
+#     volumes:
+#       - html:/var/www/html
+#     links:
+#       - db:mysql
+#     command: sh -c "/tmp/wait-for-it.sh db:3306 -- wp core install --path=/var/www/html --url=localhost --title=test --admin_user=test --admin_password=test --admin_email=test@example.com"
+
+# volumes:
+#   html:
