@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/php
+      - image: wordpress
         environment:
           WORDPRESS_DB_USER: exampleuser
           WORDPRESS_DB_PASSWORD: examplepass
@@ -18,9 +18,9 @@ jobs:
 
     steps:
       - checkout
-      - run:
-          name: install mysql-client
-          command: sudo apt install -y mysql-client
+      # - run:
+      #     name: install mysql-client
+      #     command: sudo apt install -y mysql-client
 
       - run:
           name: install wp-cli
@@ -37,6 +37,6 @@ jobs:
       - run:
           name: download, config, and install WordPress
           command: |
-            wp core download
-            wp config create --dbhost=127.0.0.1 --dbname=$WORDPRESS_DB_NAME --dbuser=$WORDPRESS_DB_USER --dbpass=$WORDPRESS_DB_PASSWORD
+            # wp core download
+            # wp config create --dbhost=127.0.0.1 --dbname=$WORDPRESS_DB_NAME --dbuser=$WORDPRESS_DB_USER --dbpass=$WORDPRESS_DB_PASSWORD
             wp core install --url=localhost --title=test --admin_user=test --admin_password=test --admin_email=test@example.com
