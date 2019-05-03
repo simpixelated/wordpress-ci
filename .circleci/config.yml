@@ -41,6 +41,6 @@ jobs:
           name: install WordPress
           command: |
             docker run -it --rm \
-            --volumes-from wordpress \
+            --volumes-from wp-container \
             --network wp-network \
             wordpress:cli core install --url=localhost --title=test --admin_user=test --admin_password=test --admin_email=test@example.com --allow-root --path=/var/www/html
