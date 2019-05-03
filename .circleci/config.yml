@@ -63,7 +63,7 @@ jobs:
           suite-id: $GI_SUITE
           network: wp-network
           vpn-token: $NGROK_TOKEN
-          vpn-target: 'wp-container:80/wp-login.php'
+          vpn-target: 'wp-container:80'
           extra-params: '{"wp_username": "admin", "wp_password": "admin"}'
 
 workflows:
