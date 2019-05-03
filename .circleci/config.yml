@@ -28,7 +28,14 @@ jobs:
           command: dockerize -wait tcp://localhost:3306 -timeout 1m
       - run:
           name: start WordPress
-          command: docker run -d --name some-wordpress -p 8080:80 wordpress
+          command: |
+            docker run -d --name some-wordpress \
+            -e WORDPRESS_DB_HOST=localhost \
+            -e WORDPRESS_DB_USER=exampleuser \
+            -e WORDPRESS_DB_PASSWORD=examplepass \
+            -e WORDPRESS_DB_NAME=exampledb \
+            -p 8080:80 \
+            wordpress
 
       - run:
           name: download, config, and install WordPress
