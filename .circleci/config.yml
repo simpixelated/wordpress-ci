@@ -40,7 +40,7 @@ jobs:
 
       - run:
           name: setup config
-          command: wp config create --dbhost=127.0.0.1 --dbname=$WORDPRESS_DB_NAME --dbuser=$WORDPRESS_DB_USER --prompt=$WORDPRESS_DB_PASSWORD
+          command: wp config create --dbhost=127.0.0.1 --dbname=$WORDPRESS_DB_NAME --dbuser=$WORDPRESS_DB_USER --dbpass=$WORDPRESS_DB_PASSWORD
 
       - run:
           name: create database
