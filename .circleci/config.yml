@@ -39,4 +39,4 @@ jobs:
           command: |
             # wp core download
             # wp config create --dbhost=127.0.0.1 --dbname=$WORDPRESS_DB_NAME --dbuser=$WORDPRESS_DB_USER --dbpass=$WORDPRESS_DB_PASSWORD
-            wp core install --url=localhost --title=test --admin_user=test --admin_password=test --admin_email=test@example.com --allow-root
+            wp core install --url=localhost --title=test --admin_user=test --admin_password=test --admin_email=test@example.com --allow-root --path=/var/www/html
